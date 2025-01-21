@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -16,7 +17,7 @@ namespace Project___Fitness
         public DateTime dateFrom { get; set; }
         public DateTime dateTo { get; set; }
 
-        public Card(MembershipLength Length, MembershipType Type)
+        public Card(MembershipLength Length= 0, MembershipType Type=0)
         {
             this.Length = Length;
             this.Type = Type;
@@ -89,9 +90,11 @@ namespace Project___Fitness
                 }
 
             }
+            Console.WriteLine(Price);
         }
         public void SetExpiryDate ()
         {
+            dateFrom = DateTime.Now;
             switch (Length)
             {
                 case MembershipLength.one_month:
@@ -110,6 +113,17 @@ namespace Project___Fitness
                     throw new ArgumentException("Invalid membership length.");
             }
         }
-    }
 
+        public void Validation()
+        {
+            if (DateTime.Now <= dateTo)
+            {
+                Console.WriteLine("The Card is valid");
+            }
+            else
+            {
+                Console.WriteLine("The Card is invalid");
+            }
+        }
+    }
 }
