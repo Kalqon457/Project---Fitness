@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,13 +12,15 @@ namespace Project___Fitness
         public string Name { get; set; }
         public int Age { get; set; }
         public Card Card { get; set; }
-        
-        public Member(int ID, string Name, int Age,Card Card)
+        public Wallet Wallet { get; set; }
+        public Member(int ID, string Name, int Age,Card Card, Wallet wallet)
         {
             this.ID = ID;
             this.Name = Name;
             this.Age = Age;
             this.Card = Card;
+            this.Wallet = wallet;
         }
+       public Member() { }
     }
 }
