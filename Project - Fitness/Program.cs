@@ -12,8 +12,8 @@ class Program
         {
             Member member = null;
             Card card = null;
-            int currentStep = 1;
-            bool processComplete = false;
+            int currentStep = 1; 
+            bool processComplete = false;  
 
             while (true)
             {
@@ -29,6 +29,7 @@ class Program
                 }
                 else
                 {
+                    Console.WriteLine("1. Create a Member");
                     Console.WriteLine("6. Exit");
                     Console.WriteLine("7. Restart");
                     Console.WriteLine("8. Check Card Validation for Existing User");
@@ -40,17 +41,18 @@ class Program
                 switch (choice)
                 {
                     case "1":
-                        if (processComplete || currentStep != 1)
-                        {
-                            Console.WriteLine("You cannot access this option right now. Follow the correct order.");
-                        }
-                        else
+                        if (!processComplete || currentStep == 1 || processComplete)
                         {
                             member = CreateMember();
                             card = new Card();
                             Console.WriteLine("Member and card created successfully!");
                             Console.WriteLine("Next: Select Membership Type and Length (Option 2).");
                             currentStep = 2;
+                            processComplete = false; 
+                        }
+                        else
+                        {
+                            Console.WriteLine("You cannot access this option right now. Follow the correct order.");
                         }
                         break;
                     case "2":
@@ -132,7 +134,6 @@ class Program
                             Console.Write("Enter Member Age: ");
                             int tempAge = int.Parse(Console.ReadLine());
 
-                            // Check if the card was created during the process
                             if (card != null && member != null && member.ID == tempId && member.Name == tempName && member.Age == tempAge)
                             {
                                 Console.WriteLine($"Card for {member.Name} is valid.");
