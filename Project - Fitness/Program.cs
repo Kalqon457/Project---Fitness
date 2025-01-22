@@ -10,23 +10,26 @@ class Program
         bool exit = false;
         while (!exit)
         {
-            Member member = null; 
-            Card card = null; 
-            int currentStep = 1; 
-            bool processComplete = false; 
-            while (!processComplete)
+            Member member = null;
+            Card card = null;
+            int currentStep = 1;
+            bool processComplete = false;
+
+            while (true)
             {
                 Console.WriteLine("\nMenu:");
-                if (currentStep == 1) Console.WriteLine("1. Create a Member");
-                if (currentStep == 2) Console.WriteLine("2. Select Membership Type and Length");
-                if (currentStep == 3) Console.WriteLine("3. Display Membership Price");
-                if (currentStep == 4) Console.WriteLine("4. Set Expiry Date");
-                if (currentStep == 5) Console.WriteLine("5. Validate Card");
-                Console.WriteLine("6. Exit");
-
-                // After step 5 is completed, show restart and check validation options
-                if (processComplete)
+                if (!processComplete)
                 {
+                    if (currentStep == 1) Console.WriteLine("1. Create a Member");
+                    if (currentStep == 2) Console.WriteLine("2. Select Membership Type and Length");
+                    if (currentStep == 3) Console.WriteLine("3. Display Membership Price");
+                    if (currentStep == 4) Console.WriteLine("4. Set Expiry Date");
+                    if (currentStep == 5) Console.WriteLine("5. Validate Card");
+                    Console.WriteLine("6. Exit");
+                }
+                else
+                {
+                    Console.WriteLine("6. Exit");
                     Console.WriteLine("7. Restart");
                     Console.WriteLine("8. Check Card Validation for Existing User");
                 }
@@ -37,21 +40,21 @@ class Program
                 switch (choice)
                 {
                     case "1":
-                        if (currentStep != 1)
+                        if (processComplete || currentStep != 1)
                         {
                             Console.WriteLine("You cannot access this option right now. Follow the correct order.");
                         }
                         else
                         {
                             member = CreateMember();
-                            card = new Card(); // Create a new card for the member
+                            card = new Card();
                             Console.WriteLine("Member and card created successfully!");
                             Console.WriteLine("Next: Select Membership Type and Length (Option 2).");
-                            currentStep = 2; // Move to the next step
+                            currentStep = 2;
                         }
                         break;
                     case "2":
-                        if (currentStep != 2)
+                        if (processComplete || currentStep != 2)
                         {
                             Console.WriteLine("You cannot access this option right now. Follow the correct order.");
                         }
@@ -59,11 +62,11 @@ class Program
                         {
                             SelectMembership(card);
                             Console.WriteLine("Next: Display Membership Price (Option 3).");
-                            currentStep = 3; // Move to the next step
+                            currentStep = 3;
                         }
                         break;
                     case "3":
-                        if (currentStep != 3)
+                        if (processComplete || currentStep != 3)
                         {
                             Console.WriteLine("You cannot access this option right now. Follow the correct order.");
                         }
@@ -71,11 +74,11 @@ class Program
                         {
                             card.Price();
                             Console.WriteLine("Next: Set Expiry Date (Option 4).");
-                            currentStep = 4; // Move to the next step
+                            currentStep = 4;
                         }
                         break;
                     case "4":
-                        if (currentStep != 4)
+                        if (processComplete || currentStep != 4)
                         {
                             Console.WriteLine("You cannot access this option right now. Follow the correct order.");
                         }
@@ -84,27 +87,25 @@ class Program
                             card.SetExpiryDate();
                             Console.WriteLine($"Card expiry date set to: {card.dateTo}");
                             Console.WriteLine("Next: Validate Card (Option 5).");
-                            currentStep = 5; // Move to the next step
+                            currentStep = 5;
                         }
                         break;
                     case "5":
-                        if (currentStep != 5)
+                        if (processComplete || currentStep != 5)
                         {
                             Console.WriteLine("You cannot access this option right now. Follow the correct order.");
                         }
                         else
                         {
                             card.Validation();
-                            Console.WriteLine("Process completed. You can restart or exit.");
-                            processComplete = true; // Mark process as complete
-                            currentStep = 7 & 8;
+                            Console.WriteLine("Process completed. You can restart, check card validation, or exit.");
+                            processComplete = true;
                         }
                         break;
                     case "6":
                         exit = true;
-                        processComplete = true;
                         Console.WriteLine("Exiting the system. Goodbye!");
-                        break;
+                        return;
                     case "7":
                         if (!processComplete)
                         {
@@ -113,8 +114,8 @@ class Program
                         else
                         {
                             Console.WriteLine("Restarting the process...");
-                            processComplete = false; // Reset the process completion
-                            currentStep = 1; // Reset the step to the start
+                            processComplete = false;
+                            currentStep = 1;
                         }
                         break;
                     case "8":
@@ -124,10 +125,23 @@ class Program
                         }
                         else
                         {
-                            // Check validation for the existing user (card validation)
-                            Console.WriteLine($"Checking card validation for {member.Name}...");
-                            card.Validation();
-                            Console.WriteLine("You can now exit or restart.");
+                            Console.Write("Enter Member ID: ");
+                            int tempId = int.Parse(Console.ReadLine());
+                            Console.Write("Enter Member Name: ");
+                            string tempName = Console.ReadLine();
+                            Console.Write("Enter Member Age: ");
+                            int tempAge = int.Parse(Console.ReadLine());
+
+                            // Check if the card was created during the process
+                            if (card != null && member != null && member.ID == tempId && member.Name == tempName && member.Age == tempAge)
+                            {
+                                Console.WriteLine($"Card for {member.Name} is valid.");
+                                card.Validation();
+                            }
+                            else
+                            {
+                                Console.WriteLine("No valid card found for the entered member details. Please restart the process.");
+                            }
                         }
                         break;
                     default:
@@ -136,6 +150,8 @@ class Program
                 }
             }
         }
+
+
     }
 
     static Member CreateMember()
